@@ -1,0 +1,2 @@
+flask-debugtoolbar
+flask-shell-ipython==0.4.1

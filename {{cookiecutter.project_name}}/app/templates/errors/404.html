@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="text-center mb-5">
+        <img src="{{ url_for("static", filename="img/cookiecutter.png") }}" class="rounded" alt="cookiecutter-flask">
+    </div>
+
+    <div class="text-center">
+        <h1>Not Found</h1>
+        <p><a href="{{ url_for('main.index') }}">{{ _('Back') }}</a></p>
+    </div>
+
+{% endblock %}

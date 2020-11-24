@@ -1,0 +1,32 @@
+<header>
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+            {% if current_user.is_authenticated %}
+                <a class="nav-link" href="{{ url_for('main.index') }}">Welcome {{ current_user.username.capitalize() }}</a>
+            {% endif %}
+        </li>
+      </ul>
+      <ul class="navbar-nav px-3">
+          <li class="nav-item text-nowrap">
+          </li>
+      </ul>
+      <div class="btn-group">
+        <button type="button" class="btn btn-outline-info">API</button>
+          <button type="button" class="btn btn-outline-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="{{ url_for('graphql.graphql') }}" target="_blank">GraphQL</a>
+          <a class="dropdown-item" href="{{ url_for('main.rest_rules') }}" target="_blank">Rest rules</a>
+        </div>
+      </div> 
+      <a class="btn btn-outline-primary ml-2" href="{{ url_for('auth.logout') }}">Sign out</a>
+    </div>
+  </nav>
+</header>

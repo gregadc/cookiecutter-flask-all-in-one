@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% include "navbar.html" %}
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Username</th>
+      <th scope="col">Created</th>
+      <th scope="col">Email</th>
+      <th scope="col">Authentication tool</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    {% if current_user.id == user.id  %}
+        <tr class="table-primary">
+    {% else %}
+        <tr>
+    {% endif %}
+      <th scope="row">{{ user.id }}</th>
+      <td>{{ user.username.capitalize() }}</td>
+      <td>{{ user.created }}</td>
+      <td>{{ user.email }}</td>
+      {% if user.oauth %}
+        <td>{{ user.oauth.provider.capitalize() }}</td>
+      {% else %}
+        <td>WebSite</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
