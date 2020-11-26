@@ -26,3 +26,4 @@ graphene==2.1.8
 graphene-sqlalchemy>=2.0
 flask-jwt-extended
 factory-boy
+gunicorn
