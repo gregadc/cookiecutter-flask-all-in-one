@@ -9,9 +9,9 @@ from flask_dance.consumer import oauth_authorized, oauth_error
 from flask_dance.contrib.google import make_google_blueprint
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.utils import get_random_password_string
-from app.extensions import db
-from app.models import OAuth, User
+from {{cookiecutter.app_name}}.utils import get_random_password_string
+from {{cookiecutter.app_name}}.extensions import db
+from {{cookiecutter.app_name}}.models import OAuth, User
 
 google_bp = make_google_blueprint(
     scope=[

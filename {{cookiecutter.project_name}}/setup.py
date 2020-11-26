@@ -19,7 +19,7 @@ setup(
     install_requires=read_file('requirements.txt').splitlines(),
     entry_points={
         'console_scripts': [
-            'app=app.manage:cli'
+            '{{cookiecutter.app_name}}={{cookiecutter.app_name}}.manage:cli'
         ]
     }
 )

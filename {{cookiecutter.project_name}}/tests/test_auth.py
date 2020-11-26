@@ -2,10 +2,10 @@ from datetime import timedelta
 import json
 import unittest
 
-from app import create_app as app
-from app.config import Config
-from app.extensions import db
-from app.models import TokenBlacklist
+from {{cookiecutter.app_name}} import create_app as app
+from {{cookiecutter.app_name}}.config import Config
+from {{cookiecutter.app_name}}.extensions import db
+from {{cookiecutter.app_name}}.models import TokenBlacklist
 from tests import factories
 
 
@@ -87,7 +87,7 @@ class UserTestCase(BaseCase):
         tester = self.client()
         # Create tokens
         res = tester.post(
-            '/api/rest/login',
+            '/api/login',
             data=json.dumps(dict(
                 username=self.factory.username,
                 password='password')
@@ -101,14 +101,14 @@ class UserTestCase(BaseCase):
         }
         self.assertEqual(res.status_code, 201)
         # Get tokens
-        res = tester.get('/api/rest/tokens', headers=header_token)
+        res = tester.get('/api/tokens', headers=header_token)
         self.assertEqual(res.status_code, 200)
         token_id = json.loads(res.get_data(as_text=True))
         self.assertEqual(res.status_code, 200)
         token_id = TokenBlacklist.query.first().to_dict['token_id']
         # Revoke token
         res = tester.delete(
-            '/api/rest/revoke_token/{0}'.format(token_id),
+            '/api/revoke_token/{0}'.format(token_id),
             headers=header_token
         )
         self.assertEqual(res.status_code, 200)
@@ -118,7 +118,7 @@ class UserTestCase(BaseCase):
         tester = self.client()
         # Create tokens
         res = tester.post(
-            '/api/rest/login',
+            '/api/login',
             data=json.dumps(dict(
                 username=self.factory.username,
                 password='password')
@@ -132,7 +132,7 @@ class UserTestCase(BaseCase):
         }
         self.assertEqual(res.status_code, 201)
         # Refresh token
-        res = tester.post('/api/rest/refresh', headers=header_token)
+        res = tester.post('/api/refresh', headers=header_token)
         self.assertEqual(res.status_code, 201)
 
 

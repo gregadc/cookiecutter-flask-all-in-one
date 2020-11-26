@@ -4,7 +4,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
 
-from app.extensions import db, login
+from {{cookiecutter.app_name}}.extensions import db, login
 
 DATE = datetime.now().replace(second=0, microsecond=0)
 

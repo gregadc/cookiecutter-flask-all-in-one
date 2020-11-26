@@ -2,7 +2,7 @@ import click
 from datetime import datetime as dt
 from secrets import token_urlsafe
 from flask.cli import FlaskGroup
-from app import create_app
+from {{cookiecutter.app_name}} import create_app
 
 
 @click.group(cls=FlaskGroup, create_app=create_app)
@@ -13,8 +13,8 @@ def cli():
 @cli.command('init')
 def init():
     """ Init admin user """
-    from app.extensions import db
-    from app.models import User
+    from {{cookiecutter.app_name}}.extensions import db
+    from {{cookiecutter.app_name}}.models import User
     click.echo("Create DB")
     db.create_all()
     click.echo("create user")

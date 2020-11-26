@@ -2,7 +2,7 @@ import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 
-from app.models import User
+from {{cookiecutter.app_name}}.models import User
 
 
 class UserSchema(SQLAlchemyObjectType):

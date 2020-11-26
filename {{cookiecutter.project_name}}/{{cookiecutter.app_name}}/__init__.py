@@ -31,14 +31,14 @@ def create_app(config=Config):
 
 
 def registering_blueprints(app):
-    from app.main.views import bp as main_bp
-    from app.main.errors import bp as error_bp
-    from app.auth.views import bp as auth_bp
-    from app.api.rest.views import bp as api_bp
-    from app.api.graphql.views import bp as graphql_bp
-    from app.auth.google import google_bp
-    from app.auth.twitter import twitter_bp
-    from app.auth.facebook import facebook_bp
+    from {{cookiecutter.app_name}}.main.views import bp as main_bp
+    from {{cookiecutter.app_name}}.main.errors import bp as error_bp
+    from {{cookiecutter.app_name}}.auth.views import bp as auth_bp
+    from {{cookiecutter.app_name}}.api.rest.views import bp as api_bp
+    from {{cookiecutter.app_name}}.api.graphql.views import bp as graphql_bp
+    from {{cookiecutter.app_name}}.auth.google import google_bp
+    from {{cookiecutter.app_name}}.auth.twitter import twitter_bp
+    from {{cookiecutter.app_name}}.auth.facebook import facebook_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(error_bp)

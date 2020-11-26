@@ -10,15 +10,15 @@ from flask_jwt_extended import (
     create_refresh_token
 )
 
-from app.api.rest.blacklist_helpers import (
+from {{cookiecutter.app_name}}.api.rest.blacklist_helpers import (
     is_token_revoked,
     add_token_to_database,
     get_user_tokens,
     revoke_token
 )
-from app.api.rest.resources import UserResource, UserListResource
-from app.extensions import jwt
-from app.models import User
+from {{cookiecutter.app_name}}.api.rest.resources import UserResource, UserListResource
+from {{cookiecutter.app_name}}.extensions import jwt
+from {{cookiecutter.app_name}}.models import User
 
 errors = {
     'UserAlreadyExistsError': {
@@ -32,7 +32,7 @@ errors = {
     },
 }
 
-bp = Blueprint('api', __name__, url_prefix="/api/rest")
+bp = Blueprint('api', __name__, url_prefix="/api")
 api = Api(bp, errors=errors)
 
 api.add_resource(UserResource, '/users/<int:user_id>')

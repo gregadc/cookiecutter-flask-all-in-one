@@ -1,5 +1,5 @@
-from app.extensions import db, ma
-from app.models import User
+from {{cookiecutter.app_name}}.extensions import db, ma
+from {{cookiecutter.app_name}}.models import User
 
 
 class UserSchema(ma.SQLAlchemyAutoSchema):

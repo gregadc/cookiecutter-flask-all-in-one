@@ -13,10 +13,10 @@ from flask import (
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user, logout_user, login_user
 
-from app.extensions import db
-from app.forms import LoginForm, RegisterForm, ResetPasswordReq, ResetPassword
-from app.models import User
-from app.email import send_email
+from {{cookiecutter.app_name}}.extensions import db
+from {{cookiecutter.app_name}}.forms import LoginForm, RegisterForm, ResetPasswordReq, ResetPassword
+from {{cookiecutter.app_name}}.models import User
+from {{cookiecutter.app_name}}.email import send_email
 
 logger = logging.getLogger(__name__)
 

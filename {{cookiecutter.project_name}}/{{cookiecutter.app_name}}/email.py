@@ -2,7 +2,7 @@ from threading import Thread
 from flask import current_app
 from flask_mail import Message
 
-from app.extensions import mail
+from {{cookiecutter.app_name}}.extensions import mail
 
 
 def send_async_email(app, msg):

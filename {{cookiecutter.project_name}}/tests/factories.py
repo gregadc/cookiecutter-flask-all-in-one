@@ -2,8 +2,8 @@ from datetime import datetime
 from factory.alchemy import SQLAlchemyModelFactory
 from factory import fuzzy, Sequence, LazyAttribute, LazyFunction
 
-from app.extensions import db
-from app.models import User
+from {{cookiecutter.app_name}}.extensions import db
+from {{cookiecutter.app_name}}.models import User
 
 
 class UserFactory(SQLAlchemyModelFactory):

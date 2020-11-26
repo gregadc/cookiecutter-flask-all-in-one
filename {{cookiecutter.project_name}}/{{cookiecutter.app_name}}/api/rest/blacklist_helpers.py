@@ -3,9 +3,9 @@ from datetime import datetime
 from sqlalchemy.orm.exc import NoResultFound
 from flask_jwt_extended import decode_token
 
-from app.extensions import db
-from app.models import TokenBlacklist
-from app.api.rest.exceptions import TokenNotFound
+from {{cookiecutter.app_name}}.extensions import db
+from {{cookiecutter.app_name}}.models import TokenBlacklist
+from {{cookiecutter.app_name}}.api.rest.exceptions import TokenNotFound
 
 
 def add_token_to_database(encoded_token, identity_claim):

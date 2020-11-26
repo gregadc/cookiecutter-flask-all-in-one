@@ -1,33 +1,36 @@
 from datetime import datetime as dt
 from secrets import token_urlsafe
-from flask import flash, redirect, url_for
+from flask import flash, redirect, url_for, current_app
 
 from flask_babel import lazy_gettext as _l
 from flask_login import login_user, current_user
 from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 from flask_dance.consumer import oauth_authorized, oauth_error
-from flask_dance.contrib.facebook import make_facebook_blueprint
+from flask_dance.contrib.twitter import make_twitter_blueprint
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.utils import get_random_password_string
-from app.extensions import db
-from app.models import OAuth, User
+from {{cookiecutter.app_name}}.utils import get_random_password_string
+from {{cookiecutter.app_name}}.extensions import db
+from {{cookiecutter.app_name}}.models import OAuth, User
 
 
-facebook_bp = make_facebook_blueprint(
-    storage=SQLAlchemyStorage(OAuth, db.session, user=current_user)
+twitter_bp = make_twitter_blueprint(
+    api_key=current_app.config['TWITTER_OAUTH_API_KEY'],
+    api_secret=current_app.config['TWITTER_OAUTH_API_SECRET'],
+    storage=SQLAlchemyStorage(OAuth, db.session, user=current_user),
 )
 
 
-@oauth_authorized.connect_via(facebook_bp)
-def facebook_logged_in(blueprint, token):
+@oauth_authorized.connect_via(twitter_bp)
+def twitter_logged_in(blueprint, token):
     if not token:
         flash("Failed to log in.", category="error")
         return redirect(url_for('main.index'))
-    resp = blueprint.session.get("/me?fields=email,name")
+
+    resp = blueprint.session.get("account/verify_credentials.json?include_email=true")
     if not resp.ok:
         msg = "Failed to fetch user info."
-        flash(msg, "warning")
+        flash(msg, category="error")
         return redirect(url_for('main.index'))
 
     info = resp.json()
@@ -49,7 +52,10 @@ def facebook_logged_in(blueprint, token):
     else:
         # Create a new local user account for this user
         username = info.get("name", "No name")
-        email = info.get("email")
+        email = info.get(
+            "email",
+            "Check request email address from users in your twitter app"
+        )
         user = User(
             username=username.lower(),
             email=email,
@@ -64,13 +70,13 @@ def facebook_logged_in(blueprint, token):
         oauth.user = user
         db.session.add_all([user, oauth])
         db.session.commit()
-        flash(_l("Successfully facebook connection"), 'success')
+        flash(_l("Successfully twitter connection"), 'success')
     login_user(user)
     return redirect(url_for('main.index'))
 
 
-@oauth_error.connect_via(facebook_bp)
-def facebook_error(blueprint, message, response):
+@oauth_error.connect_via(twitter_bp)
+def twitter_error(blueprint, message, response):
     msg = (_l("{message} {response}")).format(
         message=message,
         response=response

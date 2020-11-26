@@ -3,24 +3,24 @@ import unittest
 from sqlalchemy import asc
 from graphene.test import Client
 
-from app.api.graphql.views import schema
-from app.config import Config
-from app.extensions import db
-from app import create_app as app
+from {{cookiecutter.app_name}}.api.graphql.views import schema
+from {{cookiecutter.app_name}}.config import Config
+from {{cookiecutter.app_name}}.extensions import db
+from {{cookiecutter.app_name}} import create_app as app
 from tests import factories
 
 QUERY_USER_ID = """
-{{
-  users(userId:{0}){{
-    edges{{
-      node{{
+{
+  users(userId:%d){
+    edges{
+      node{
         email
         username
         created
-      }}
-    }}
-  }}
-}}
+      }
+    }
+  }
+}
 """
 
 QUERY_ALL_USERS = """
@@ -57,7 +57,8 @@ class UserSchemaTestCase(unittest.TestCase):
 
     def test_get_user(self):
         user = self.user_factory[0]
-        res = self.client.execute(QUERY_USER_ID.format(user.id))
+        query = QUERY_USER_ID % (user.id)
+        res = self.client.execute(query)
         self.assertIn(user.email, json.dumps(res))
         self.assertEqual(1, len(res['data']['users']['edges']))
 

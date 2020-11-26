@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_graphql import GraphQLView
 from flask_login import login_required
 
-from app.api.graphql.schemas import schema
+from {{cookiecutter.app_name}}.api.graphql.schemas import schema
 
 bp = Blueprint('graphql', __name__)
 

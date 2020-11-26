@@ -2,9 +2,9 @@ from flask import request, url_for, jsonify
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
-from app.extensions import db, jwt
-from app.models import User
-from app.api.rest.schemas import UserSchema
+from {{cookiecutter.app_name}}.extensions import db, jwt
+from {{cookiecutter.app_name}}.models import User
+from {{cookiecutter.app_name}}.api.rest.schemas import UserSchema
 
 PER_PAGE = 50
 PAGE_NUMBER = 1

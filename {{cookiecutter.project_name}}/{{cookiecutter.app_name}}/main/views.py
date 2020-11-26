@@ -2,7 +2,7 @@ import logging
 from flask import render_template, Blueprint, make_response, current_app as app
 from flask_login import login_required
 
-from app.models import User
+from {{cookiecutter.app_name}}.models import User
 
 logger = logging.getLogger(__name__)
 
