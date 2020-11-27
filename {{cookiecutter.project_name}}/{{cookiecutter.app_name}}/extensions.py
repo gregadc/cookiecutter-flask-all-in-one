@@ -10,7 +10,7 @@ from flask_jwt_extended import JWTManager
 db = SQLAlchemy()
 login = LoginManager()
 login.login_view = 'auth.login'
-login.login_message = _l("Please login.")
+login.login_message = _l("")
 mail = Mail()
 babel = Babel()
 migrate = Migrate()

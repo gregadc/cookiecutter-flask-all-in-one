@@ -20,20 +20,8 @@ from {{cookiecutter.app_name}}.api.rest.resources import UserResource, UserListR
 from {{cookiecutter.app_name}}.extensions import jwt
 from {{cookiecutter.app_name}}.models import User
 
-errors = {
-    'UserAlreadyExistsError': {
-        'message': "A user with that username already exists.",
-        'status': 409,
-    },
-    'ResourceDoesNotExist': {
-        'message': "A resource with that ID no longer exists.",
-        'status': 404,
-        'extra': "Any extra information you want.",
-    },
-}
-
 bp = Blueprint('api', __name__, url_prefix="/api")
-api = Api(bp, errors=errors)
+api = Api(bp)
 
 api.add_resource(UserResource, '/users/<int:user_id>')
 api.add_resource(UserListResource, '/users')

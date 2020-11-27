@@ -35,7 +35,6 @@ You have the possibility to change the values of the cookiecutter.json file in o
     "full_name": "admin",
     "email": "admin@gmail.com",
     "password": "admin",
-    "use_pipenv": ["no", "yes"],
     "debug": [0, 1],
     "_copy_without_render": [
         "{{cookiecutter.project_name}}/app/templates/*.html",
@@ -52,6 +51,13 @@ pip install -r requirements.txt
 pip install -e .
 
 ```
+The database to use is postgres but you can change the DATABASE_URI of the .env if you want to use another one
+If you don't have postgres and you are comfortable with docker run this command it will create a docker postgres container for you
+
+```bash
+docker run --name db_flask_app -e POSTGRES_PASSWORD=test -e POSTGRES_USER=test -e POSTGRES_DB=test -p 5432:5432 -d postgres
+```
+
 Run this command to create the database and create a user
 `myapp init`
 
@@ -91,7 +97,7 @@ GOOGLE_OAUTH_CLIENT_SECRET="secret-id"
 
 We have multiple ways to use this project.
 
-### First way
+### User interface
 
 Open a browser, and enter the url which provides a graphical interface and a basic authentication service, but also the possibility of using the google, facebook services if you have entered the necessary credentials
 
@@ -108,7 +114,7 @@ etc ...
 ```
 If you want to use other providers like github or linkedin look at [flask-dance](https://flask-dance.readthedocs.io/en/latest/) which allowed to implement these services.
 
-### Second way
+### REST api
 
 You can use the rest api, and his authentication using Flask-JWT-Extended including access token and refresh token management
 A first call to the API will return the tokens to you
@@ -139,19 +145,31 @@ curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $REFRE
 
 You can list the tokens and revoke them if you want
 ```bash
-curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS http://localhost:5000/api/tokens
+curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $NEW_ACCESS http://localhost:5000/api/tokens
 ```
 This endpoint will return the tokens with their id so that you can revoke them
 ```bash
-curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS http://localhost:5000/api/revoke_token/<token_id>
+curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $NEW_ACCESS http://localhost:5000/api/revoke_token/<token_id>
 
 {
     "message": "token revoked"
 }
 ```
 
+### GraphQl
 
+You also have the possibility of viewing GraphQl resources if you are connected, launch `http://0.0.0.0:5000/graphql` in your browser
 
+Used packages :
 
+* [Graphene](https://docs.graphene-python.org/en/latest/)
+* [Flask-GraphQL](https://github.com/graphql-python/flask-graphql)
+* [graphene-sqlalchemy](https://readthedocs.org/projects/graphene-sqlalchemy/)
 
+<p align="center">
+  <img src="{{cookiecutter.project_name}}/{{cookiecutter.app_name}}/static/img/graph.png" alt=""/>
+</p>
 
+## Docker deploy
+
+In progress

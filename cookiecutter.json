@@ -5,7 +5,6 @@
     "full_name": "admin",
     "email": "admin@gmail.com",
     "password": "admin",
-    "use_pipenv": ["no", "yes"],
     "debug": [0, 1],
     "_copy_without_render": [
         "{{cookiecutter.project_name}}/app/templates/*.html",

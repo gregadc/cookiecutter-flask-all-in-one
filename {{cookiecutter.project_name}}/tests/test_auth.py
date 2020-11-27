@@ -53,9 +53,9 @@ class UserTestCase(BaseCase):
             data=dict(username=self.factory.username, password='password'),
             follow_redirects=True
         )
-        s = "Welcome {0}".format(self.factory.username.capitalize())
+        value = "Welcome {0}".format(self.factory.username.capitalize())
         self.assertEqual(res.status_code, 200)
-        self.assertIn(s, res.data.decode())
+        self.assertIn(value, res.data.decode())
 
     def test_register_user(self):
         tester = self.client()
@@ -78,9 +78,9 @@ class UserTestCase(BaseCase):
             data=dict(username=self.factory.username, password='password'),
             follow_redirects=True
         )
-        s = "Welcome {0}".format(self.factory.username.capitalize())
+        value = "Welcome {0}".format(self.factory.username.capitalize())
         self.assertEqual(res.status_code, 200)
-        self.assertIn(s, res.data.decode())
+        self.assertIn(value, res.data.decode())
 
 
     def test_token_process(self):

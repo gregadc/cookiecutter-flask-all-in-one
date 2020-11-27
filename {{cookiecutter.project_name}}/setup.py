@@ -11,7 +11,7 @@ def read_file(name):
 setup(
     name="app",
     version=__version__,
-    author="gregadc",
+    author='Gregory Amorim (gregadc)',
     author_email='adc.greg@gmail.com',
     description="Cookiecutter Flask All-In-One",
     long_description=read_file('README.rst'),
