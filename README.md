@@ -46,7 +46,7 @@ You have the possibility to change the values of the cookiecutter.json file in o
 Once the project is created
 ```bash
 
-cd yourproject
+cd cookiecutter-flask-all-in-one
 pip install -r requirements.txt
 pip install -e .
 
@@ -143,7 +143,7 @@ curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $REFRE
 }
 ```
 
-You can list the tokens and revoke them if you want
+You can list your tokens and revoke them if you want
 ```bash
 curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $NEW_ACCESS http://localhost:5000/api/tokens
 ```
