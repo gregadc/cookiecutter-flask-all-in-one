@@ -9,7 +9,7 @@ def read_file(name):
 
 
 setup(
-    name="app",
+    name="{{cookiecutter.app_name}}",
     version=__version__,
     author='Gregory Amorim (gregadc)',
     author_email='adc.greg@gmail.com',
