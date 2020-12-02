@@ -172,4 +172,15 @@ Used packages :
 
 ## Docker deploy
 
-In progress
+You have the possibility to use docker by launching the docker-compose, you are free to modify it if you want to use it in production
+```bash
+docker-compose up -d --build
+```
+This command will create your storytellers and the image
+
+## Testing
+To run the tests the project, we uses [Tox](https://tox.readthedocs.io/en/latest/) which is a command line driven automated test tool for Python
+```bash
+tox -e lint # launch linter
+tox -e myapp # launch tests
+```
