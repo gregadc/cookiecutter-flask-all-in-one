@@ -60,7 +60,6 @@ def twitter_logged_in(blueprint, token):
             username=username.lower(),
             email=email,
             created=dt.now(),
-            is_admin=False,
             token=token_urlsafe(),
             token_expiration=dt.now()
         )

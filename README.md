@@ -130,13 +130,13 @@ Once the tokens have been recovered you can now use the API to consult the resou
 
 ```bash
 export ACCESS="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDY0MjQzOTAsIm5iZiI6MTYwNjQyNDM5MCwianRpIjoiYWU3ZjdiZjctMjkzYS00OTcwLThlNGYtNjMwNGY4MGExYjZhIiwiZXhwIjoxNjA2NDI1MjkwLCJpZGVudGl0eSI6InRvdG8iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.Dbly2Mln9cD6olEMnoCxvoJ1rUGdjQgP6ekGJY5sOXw"
-curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS http://localhost:5000/api/users
+curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS" http://localhost:5000/api/users
 ```
 
 You can also refresh the token
 ```bash
 export REFRESH="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDY0MjQ0NTgsIm5iZiI6MTYwNjQyNDQ1OCwianRpIjoiN2MyZGY2ZjAtZDZhZC00ZTI4LTk0NTktMDMyYzkwMDFkODI3IiwiZXhwIjoxNjA5MDE2NDU4LCJpZGVudGl0eSI6InRvdG8iLCJ0eXBlIjoicmVmcmVzaCJ9.IkQ93fdjH-w3veiVOZf92fTPbkrLXwXp37I5uBCgIYU"
-curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $REFRESH http://localhost:5000/api/refresh
+curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $REFRESH" http://localhost:5000/api/refresh
 
 {
     "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDY0MjUzNjUsIm5iZiI6MTYwNjQyNTM2NSwianRpIjoiZmQ3Y2RiMmYtZTZlZC00NDdmLTg3ZWItNzg2ZTc1ZGY0NzYzIiwiZXhwIjoxNjA2NDI2MjY1LCJpZGVudGl0eSI6InRvdG8iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.hLrksk8nKrqY4wED1QYOGjIXhR-Rq7Zf_TalhPsJ-sI"
@@ -156,7 +156,7 @@ curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $NEW_A
 }
 ```
 
-### GraphQl
+### GraphQL
 
 You also have the possibility of viewing GraphQl resources if you are connected, launch `http://0.0.0.0:5000/graphql` in your browser
 
@@ -170,17 +170,32 @@ Used packages :
   <img src="{{cookiecutter.project_name}}/{{cookiecutter.app_name}}/static/img/graph.png" alt=""/>
 </p>
 
-## Docker deploy
+The second solution to consult Graphql resources is to use the tokens generated above
+
+```bash
+# specific user
+curl -X GET --header 'Content-Type: application/graphql' -H "Authorization: Bearer $ACCESS" --data-raw '{ users(userId:1){ edges{ node{ email, username } } } }' http://0.0.0.0:5000/graphql
+
+# all users
+curl -X GET --header 'Content-Type: application/graphql' -H "Authorization: Bearer $ACCESS" --data-raw '{ users{ edges{ node{ email, username } } } }' http://0.0.0.0:5000/graphql
+```
+
+## Docker deployment
 
 You have the possibility to use docker by launching the docker-compose, you are free to modify it if you want to use it in production
 ```bash
 docker-compose up -d --build
 ```
-This command will create your storytellers and the image
+This command will create your containers and the image
 
 ## Testing
 To run the tests the project, we uses [Tox](https://tox.readthedocs.io/en/latest/) which is a command line driven automated test tool for Python
+
+Run the linter with [flake8](https://flake8.pycqa.org/en/latest/)
 ```bash
-tox -e lint # launch linter
-tox -e myapp # launch tests
+tox -e lint 
+```
+Run tests
+```bash
+tox -e myapp
 ```
