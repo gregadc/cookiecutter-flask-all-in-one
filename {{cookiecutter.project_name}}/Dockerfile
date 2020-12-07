@@ -1,4 +1,4 @@
-FROM python:{{cookiecutter.python_version}}
+FROM python:{{cookiecutter.python}}
 
 WORKDIR /usr/src/app
 

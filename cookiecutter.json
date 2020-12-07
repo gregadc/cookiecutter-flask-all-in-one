@@ -1,7 +1,7 @@
 {
     "project_name": "cookiecutter-flask-all-in-one-test",
     "app_name": "myapp",
-    "python_version": ["3.8", "3.6", "3.7"],
+    "python": ["3.8", "3.6", "3.7"],
     "full_name": "admin",
     "email": "admin@gmail.com",
     "password": "admin",
