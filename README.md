@@ -119,7 +119,7 @@ If you want to use other providers like github or linkedin look at [flask-dance]
 You can use the rest api, and his authentication using Flask-JWT-Extended including access token and refresh token management
 A first call to the API will return the tokens to you
 ```bash
-curl -X POST -H "Content-Type: application/json" -d '{"username": "admin", "password": "admin"}' http://localhost:5000/api/login
+curl -X POST --header "Content-Type: application/json" -d '{"username": "admin", "password": "admin"}' http://localhost:5000/api/login
 
 {
     "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDY0MjQzOTAsIm5iZiI6MTYwNjQyNDM5MCwianRpIjoiYWU3ZjdiZjctMjkzYS00OTcwLThlNGYtNjMwNGY4MGExYjZhIiwiZXhwIjoxNjA2NDI1MjkwLCJpZGVudGl0eSI6InRvdG8iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.Dbly2Mln9cD6olEMnoCxvoJ1rUGdjQgP6ekGJY5sOXw"
@@ -130,13 +130,13 @@ Once the tokens have been recovered you can now use the API to consult the resou
 
 ```bash
 export ACCESS="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDY0MjQzOTAsIm5iZiI6MTYwNjQyNDM5MCwianRpIjoiYWU3ZjdiZjctMjkzYS00OTcwLThlNGYtNjMwNGY4MGExYjZhIiwiZXhwIjoxNjA2NDI1MjkwLCJpZGVudGl0eSI6InRvdG8iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.Dbly2Mln9cD6olEMnoCxvoJ1rUGdjQgP6ekGJY5sOXw"
-curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS" http://localhost:5000/api/users
+curl -X GET --header "Content-Type: application/json" --header "Authorization: Bearer $ACCESS" http://localhost:5000/api/users
 ```
 
 You can also refresh the token
 ```bash
 export REFRESH="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDY0MjQ0NTgsIm5iZiI6MTYwNjQyNDQ1OCwianRpIjoiN2MyZGY2ZjAtZDZhZC00ZTI4LTk0NTktMDMyYzkwMDFkODI3IiwiZXhwIjoxNjA5MDE2NDU4LCJpZGVudGl0eSI6InRvdG8iLCJ0eXBlIjoicmVmcmVzaCJ9.IkQ93fdjH-w3veiVOZf92fTPbkrLXwXp37I5uBCgIYU"
-curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $REFRESH" http://localhost:5000/api/refresh
+curl -X GET --header "Content-Type: application/json" --header "Authorization: Bearer $REFRESH" http://localhost:5000/api/refresh
 
 {
     "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDY0MjUzNjUsIm5iZiI6MTYwNjQyNTM2NSwianRpIjoiZmQ3Y2RiMmYtZTZlZC00NDdmLTg3ZWItNzg2ZTc1ZGY0NzYzIiwiZXhwIjoxNjA2NDI2MjY1LCJpZGVudGl0eSI6InRvdG8iLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.hLrksk8nKrqY4wED1QYOGjIXhR-Rq7Zf_TalhPsJ-sI"
@@ -145,11 +145,11 @@ curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $REFRE
 
 You can list your tokens and revoke them if you want
 ```bash
-curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $NEW_ACCESS http://localhost:5000/api/tokens
+curl -X GET --header "Content-Type: application/json" --header "Authorization: Bearer $NEW_ACCESS http://localhost:5000/api/tokens
 ```
 This endpoint will return the tokens with their id so that you can revoke them
 ```bash
-curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $NEW_ACCESS http://localhost:5000/api/revoke_token/<token_id>
+curl -X GET --header "Content-Type: application/json" --header "Authorization: Bearer $NEW_ACCESS http://localhost:5000/api/revoke_token/<token_id>
 
 {
     "message": "token revoked"
@@ -174,10 +174,10 @@ The second solution to consult Graphql resources is to use the tokens generated 
 
 ```bash
 # specific user
-curl -X GET --header 'Content-Type: application/graphql' -H "Authorization: Bearer $ACCESS" --data-raw '{ users(userId:1){ edges{ node{ email, username } } } }' http://0.0.0.0:5000/graphql
+curl -X GET --header 'Content-Type: application/graphql' --header "Authorization: Bearer $ACCESS" --data-raw '{ users(userId:1){ edges{ node{ email, username } } } }' http://0.0.0.0:5000/graphql
 
 # all users
-curl -X GET --header 'Content-Type: application/graphql' -H "Authorization: Bearer $ACCESS" --data-raw '{ users{ edges{ node{ email, username } } } }' http://0.0.0.0:5000/graphql
+curl -X GET --header 'Content-Type: application/graphql' --header "Authorization: Bearer $ACCESS" --data-raw '{ users{ edges{ node{ email, username } } } }' http://0.0.0.0:5000/graphql
 ```
 
 ## Docker deployment

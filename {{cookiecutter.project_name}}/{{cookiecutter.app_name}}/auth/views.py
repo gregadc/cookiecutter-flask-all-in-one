@@ -30,7 +30,7 @@ def create_user(form):
         User.username == username or User.email == email
     ).first()
     if existing_user:
-        flash(_l(f'{username} ({email}) already created!'), 'success')
+        flash(_l(f'{username} ({email}) already created!'), 'info')
         return redirect(url_for('auth.login'))
     else:
         now = dt.now().replace(second=0, microsecond=0)
@@ -42,7 +42,7 @@ def create_user(form):
             token_expiration=dt.now()
         )
         new_user.set_password(form.password.data)
-        flash(_l(f'{username} you are now a registered'), 'success')
+        flash(_l(f'{username} you are registered now'), 'success')
         db.session.add(new_user)
         db.session.commit()
     logger.info('Form action')
@@ -68,7 +68,7 @@ def login():
 @bp.route('/logout')
 def logout():
     logout_user()
-    flash("You are logged out.", "info")
+    flash("You are logged out.", "success")
     return redirect(url_for('auth.login'))
 
 
@@ -121,6 +121,6 @@ def reset_password_token(token):
         if user:
             user.set_password(form.password.data)
             db.session.commit()
-            flash("Password changed!", "info")
+            flash("Password changed!", "success")
             return redirect(url_for('auth.login'))
     return render_template('auth/reset_password.html', form=form)
