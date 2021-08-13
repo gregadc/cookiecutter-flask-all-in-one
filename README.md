@@ -26,7 +26,7 @@ Once cookiecutter installed, run this command to create the project
 cookiecutter https://github.com/gregadc/cookiecutter-flask-all-in-one.git
 ```
 
-You have the possibility to change the values of the cookiecutter.json file in order to change the name of the project, the name of the application, or whatever you want want and relaunch the command
+You have the possibility to change the values of the cookiecutter.json file in order to change the name of the project, the name of the application, or whatever you want and relaunch the command
 ```json
 {
     "project_name": "cookiecutter-flask-all-in-one",
