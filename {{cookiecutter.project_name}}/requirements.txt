@@ -1,5 +1,5 @@
 alembic==1.4.3
-Babel==2.8.0
+Babel==2.9.1
 Flask==1.1.2
 Flask-Babel==2.0.0
 Flask-Mail==0.9.1
