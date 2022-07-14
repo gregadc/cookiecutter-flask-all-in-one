@@ -5,7 +5,6 @@ from flask_restful import Api
 from flask_jwt_extended import (
     create_access_token,
     jwt_required,
-    jwt_refresh_token_required,
     get_jwt_identity,
     create_refresh_token
 )
@@ -27,9 +26,9 @@ api.add_resource(UserResource, '/users/<int:user_id>')
 api.add_resource(UserListResource, '/users')
 
 
-@jwt.token_in_blacklist_loader
-def check_if_token_revoked(decoded_token):
-    return is_token_revoked(decoded_token)
+@jwt.token_in_blocklist_loader
+def check_if_token_revoked(jwt_header, jwt_payload):
+    return is_token_revoked(jwt_payload)
 
 
 @bp.app_errorhandler(404)
@@ -42,7 +41,7 @@ def handle_500(err):
     return jsonify({"mgs": "{0}".format(err)}), 500
 
 
-@bp.route('/login', methods=['POST'])
+@bp.route('/login', methods=['POST'], endpoint="login")
 def login():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
@@ -71,8 +70,8 @@ def login():
     return jsonify(ret), 201
 
 
-@bp.route('/refresh', methods=['POST'])
-@jwt_refresh_token_required
+@bp.route('/refresh', methods=['POST'], endpoint="refresh")
+@jwt_required(refresh=True)
 def refresh():
     current_user = get_jwt_identity()
     access_token = create_access_token(identity=current_user)
@@ -80,8 +79,8 @@ def refresh():
     return jsonify({'access_token': access_token}), 201
 
 
-@bp.route('/tokens', methods=['GET'])
-@jwt_required
+@bp.route('/tokens', methods=['GET'], endpoint="get_tokens")
+@jwt_required()
 def get_tokens():
     user_identity = get_jwt_identity()
     all_tokens = get_user_tokens(user_identity)
@@ -89,8 +88,8 @@ def get_tokens():
     return jsonify(ret), 200
 
 
-@bp.route('/revoke_token/<token_id>', methods=['DELETE'])
-@jwt_required
+@bp.route('/revoke_token/<token_id>', methods=['DELETE'], endpoint="revoke")
+@jwt_required()
 def revoke(token_id):
     user_identity = get_jwt_identity()
     revoke_token(token_id, user_identity)
