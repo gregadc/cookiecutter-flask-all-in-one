@@ -28,7 +28,7 @@ class User(db.Model, UserMixin):
         self.created = DATE
         self.token = token_urlsafe()
         self.token_expiration = DATE
-        self.password = generate_password_hash(self.password, method='sha256')
+        self.password = ""
 
     def __repr__(self):
         return '<User {}>'.format(self.username)

@@ -1,47 +1,113 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
-# See: https://circleci.com/docs/2.0/orb-intro/
-orbs:
-  # The python orb contains a set of prepackaged CircleCI configuration you can use repeatedly in your configuration files
-  # Orb commands and jobs help you with common scripting around a language/tool
-  # so you dont have to copy and paste it everywhere.
-  # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
-  python: circleci/python@1.5.0
+aliases:
+    - &process_env_test
+        run:
+            name: Process .env file variables
+            command: echo "export $(grep -v '^#' {{cookiecutter.project_name}}/{{cookiecutter.app_name}}/.env | xargs)" >> $BASH_ENV
+    - &source_env
+        run:
+            name: Source environment
+            command: source $BASH_ENV
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build-and-test: # This is the name of the job, feel free to change it to better match what you're trying to do!
-    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
-    # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
-    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
-    # The executor is the environment in which the steps below will be executed - below will use a python 3.10.2 container
-    # Change the version below to your required version of python
-    docker:
-      - image: cimg/python:3.10.2
-    # Checkout the code as the first step. This is a dedicated CircleCI step.
-    # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
-    # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
-    # Then run your tests!
-    # CircleCI will report the results back to your VCS provider.
-    steps:
-      - checkout
-      - python/install-packages:
-          pkg-manager: pip
-          # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory.
-          # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
-      - run:
-          name: Run tests
-          # This assumes pytest is installed via the install-package step above
-          command: pytest
+    checkout:
+        docker:
+            - image: cimg/python:3.8-node
+        steps:
+            - checkout
+            - *process_env_test
+            - *source_env
+            - restore_cache: # **restores saved dependency cache if the Branch key template or requirements.txt files have not changed since the previous run**
+                key: v1-python-cache-{{ checksum "{{cookiecutter.project_name}}/requirements.txt" }}
+            - run:
+                name: Create environment and install deps
+                command: |
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install -r {{cookiecutter.project_name}}/requirements.txt
+                    pip install flake8
+                    pip install black
+                    pip install coverage
+            - save_cache: # ** special step to save dependency cache **
+                key: v1-python-cache-{{ checksum "{{cookiecutter.project_name}}/requirements.txt" }}
+                paths:
+                    - "venv"
+            - persist_to_workspace:
+                root: .
+                paths:
+                    - .
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+    build-and-test:
+        docker:
+            - image: cimg/python:3.8-node
+            - image: circleci/postgres:12.0-alpine
+              #auth:
+              #  username: test
+              #  password: test
+              environment:
+                POSTGRES_USER: test
+                POSTGRES_PASSWORD: "test"
+                POSTGRES_DB: test
+        steps:
+            - checkout
+            - *process_env_test
+            - *source_env
+            - restore_cache: # **restores saved dependency cache if the Branch key template or requirements.txt files have not changed since the previous run**
+                key: v1-python-cache-{{ checksum "{{cookiecutter.project_name}}/requirements.txt" }}
+            -   run:
+                    name: Create environment and install deps
+                    command: |
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        pip install -r {{cookiecutter.project_name}}/requirements.txt
+                        pip install flake8
+                        pip install black
+                        pip install coverage
+                        pip install cookiecutter
+                        # pip3 install --upgrade pip cookiecutter
+                        cookiecutter . --no-input
+                        ls .
+            -   save_cache: # ** special step to save dependency cache **
+                    key: v1-python-cache-{{ checksum "{{cookiecutter.project_name}}/requirements.txt" }}
+                    paths:
+                        - "venv"
+            -   persist_to_workspace:
+                    root: .
+                    paths:
+                        - .
+
+    flake8:
+        docker:
+            - image: cimg/python:3.8-node
+        steps:
+            -   attach_workspace:
+                    at: .
+            -   run:
+                    command: |
+                        . venv/bin/activate
+                        flake8 . --extend-exclude=dist,build,node_modules,venv --show-source --statistics
+
+    black:
+        docker:
+            - image: cimg/python:3.8-node
+        steps:
+            -   attach_workspace:
+                    at: .
+            -   run:
+                    command: |
+                        . venv/bin/activate
+                        black . --check
+
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
-    jobs:
-      - build-and-test
+    version: 2
+    prepare-and-check:
+        jobs:
+            - checkout
+            - flake8:
+                requires:
+                    - checkout
+            - black:
+                requires:
+                    - checkout
+            - build-and-test
