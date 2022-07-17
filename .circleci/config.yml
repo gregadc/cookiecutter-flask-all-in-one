@@ -1,0 +1,109 @@
+version: 2.1
+
+aliases:
+    - &process_env_test
+        run:
+            name: Process .env file variables
+            command: echo "export $(grep -v '^#' .env | xargs)" >> $BASH_ENV
+    - &source_env
+        run:
+            name: Source environment
+            command: source $BASH_ENV
+
+jobs:
+    checkout:
+        docker:
+            - image: cimg/python:3.8-node
+        steps:
+            - checkout
+            - *process_env_test
+            - *source_env
+            - restore_cache: # **restores saved dependency cache if the Branch key template or requirements.txt files have not changed since the previous run**
+                key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            -   run:
+                    name: Create environment and install deps
+                    command: |
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        pip install -r requirements.txt
+                        pip install flake8
+                        pip install black
+                        pip install coverage
+            -   save_cache: # ** special step to save dependency cache **
+                    key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+                    paths:
+                        - "venv"
+            -   persist_to_workspace:
+                    root: .
+                    paths:
+                        - .
+
+    build-and-test:
+        docker:
+            - image: cimg/python:3.8-node
+            - image: circleci/postgres:12.0-alpine
+              #auth:
+              #  username: test
+              #  password: test
+              environment:
+                POSTGRES_USER: test
+                POSTGRES_PASSWORD: "test"
+                POSTGRES_DB: test
+        steps:
+            - checkout
+            - *process_env_test
+            - *source_env
+            - restore_cache: # **restores saved dependency cache if the Branch key template or requirements.txt files have not changed since the previous run**
+                key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            -   run:
+                    name: Create environment and install deps
+                    command: |
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        pip install -r requirements.txt
+                        pip install flake8
+                        pip install black
+                        pip install coverage
+            -   save_cache: # ** special step to save dependency cache **
+                    key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+                    paths:
+                        - "venv"
+            -   persist_to_workspace:
+                    root: .
+                    paths:
+                        - .
+
+    flake8:
+        docker:
+            - image: cimg/python:3.8-node
+        steps:
+            -   attach_workspace:
+                    at: .
+            -   run:
+                    command: |
+                        . venv/bin/activate
+                        flake8 . --extend-exclude=dist,build,node_modules,venv --show-source --statistics
+
+    black:
+        docker:
+            - image: cimg/python:3.8-node
+        steps:
+            -   attach_workspace:
+                    at: .
+            -   run:
+                    command: |
+                        . venv/bin/activate
+                        black . --check
+
+workflows:
+    version: 2
+    prepare-and-check:
+        jobs:
+            - checkout
+            - flake8:
+                requires:
+                    - checkout
+            - black:
+                requires:
+                    - checkout
+            - build-and-test
