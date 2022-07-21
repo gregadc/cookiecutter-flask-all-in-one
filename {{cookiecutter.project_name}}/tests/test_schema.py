@@ -1,6 +1,5 @@
 import json
 import unittest
-from sqlalchemy import asc
 from graphene.test import Client
 
 from {{cookiecutter.app_name}}.api.graphql.views import schema

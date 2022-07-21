@@ -82,7 +82,6 @@ class UserTestCase(BaseCase):
         self.assertEqual(res.status_code, 200)
         self.assertIn(value, res.data.decode())
 
-
     def test_token_process(self):
         tester = self.client()
         # Create tokens
