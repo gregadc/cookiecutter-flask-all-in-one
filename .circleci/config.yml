@@ -55,27 +55,26 @@ jobs:
             - *source_env
             - restore_cache: # **restores saved dependency cache if the Branch key template or requirements.txt files have not changed since the previous run**
                 key: v1-python-cache-{{ checksum "{{cookiecutter.project_name}}/requirements.txt" }}
-            -   run:
-                    name: Create environment and install deps
-                    command: |
-                        python3 -m venv venv
-                        . venv/bin/activate
-                        pip install -r {{cookiecutter.project_name}}/requirements.txt
-                        pip install flake8
-                        pip install black
-                        pip install coverage
-                        pip install cookiecutter
-                        # pip3 install --upgrade pip cookiecutter
-                        cookiecutter . --no-input
-                        ls .
-            -   save_cache: # ** special step to save dependency cache **
-                    key: v1-python-cache-{{ checksum "{{cookiecutter.project_name}}/requirements.txt" }}
-                    paths:
-                        - "venv"
-            -   persist_to_workspace:
-                    root: .
-                    paths:
-                        - .
+            - run:
+                name: Create environment and install deps
+                command: |
+                  python3 -m venv venv
+                  . venv/bin/activate
+                  pip install -r {{cookiecutter.project_name}}/requirements.txt
+                  pip install flake8
+                  pip install black
+                  pip install coverage
+                  pip install cookiecutter
+                  cookiecutter . --no-input
+                  ls .
+            - save_cache: # ** special step to save dependency cache **
+              key: v1-python-cache-{{ checksum "{{cookiecutter.project_name}}/requirements.txt" }}
+              paths:
+                - "venv"
+            - persist_to_workspace:
+                root: .
+                paths:
+                  - .
 
     flake8:
         docker:
