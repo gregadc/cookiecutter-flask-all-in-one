@@ -50,12 +50,10 @@ jobs:
                 POSTGRES_PASSWORD: "test"
                 POSTGRES_DB: test
         steps:
+            - attach_workspace:
+                at: .
             - *process_env_test
             - *source_env
-            - attach_workspace:
-                    at: .
-            #- restore_cache: # **restores saved dependency cache if the Branch key template or requirements.txt files have not changed since the previous run**
-            #    key: v1-python-cache-{{ checksum "{{cookiecutter.project_name}}/requirements.txt" }}
             - run:
                 name: Create environment and install deps
                 command: |
@@ -64,8 +62,8 @@ jobs:
                   tox -e myapp
             #- save_cache: # ** special step to save dependency cache **
             #    key: v1-python-cache-{{ checksum "{{cookiecutter.project_name}}/requirements.txt" }}
-            #    paths:
-            #        - "venv"
+                paths:
+                    - "venv"
             - persist_to_workspace:
                 root: .
                 paths:
@@ -75,13 +73,13 @@ jobs:
         docker:
             - image: cimg/python:3.8-node
         steps:
-            - attach_workspace:
-                at: .
-            - run:
-                command: |
-                    . venv/bin/activate
-                    cd cookiecutter-flask-all-in-one-test
-                    tox -e lint
+            -   attach_workspace:
+                    at: .
+            -   run:
+                    command: |
+                        . venv/bin/activate
+                        cd cookiecutter-flask-all-in-one-test
+                        tox -e lint
 
     black:
         docker:
@@ -105,4 +103,6 @@ workflows:
             #- black:
             #    requires:
             #        - checkout
-            - build-and-test
+            - build-and-test:
+                requires:
+                    - checkout
