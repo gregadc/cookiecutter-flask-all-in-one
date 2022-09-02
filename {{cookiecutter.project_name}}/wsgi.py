@@ -1,6 +1,5 @@
 """App entry point."""
 from {{cookiecutter.app_name}} import create_app, db, models
-from {{cookiecutter.app_name}}.manage import cli
 app = create_app()
 
 
