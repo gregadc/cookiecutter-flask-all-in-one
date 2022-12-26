@@ -100,9 +100,6 @@ workflows:
             - flake8:
                 requires:
                     - checkout
-            #- black:
-            #    requires:
-            #        - checkout
             - build-and-test:
                 requires:
                     - checkout
