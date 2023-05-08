@@ -3,8 +3,8 @@
 A Flask template that uses cookiecutter. (Supports Python >= 3.7)
 
 ![Python](https://img.shields.io/badge/Python-v^3.7-blue.svg?logo=python&longCache=true&logoColor=white&colorB=5e81ac&style=flat-square&colorA=4c566a)
-![Flask](https://img.shields.io/badge/Flask-v2.1.0-blue.svg?longCache=true&logo=flask&style=flat-square&logoColor=white&colorB=5e81ac&colorA=4c566a)
-![Flask-SQLAlchemy](https://img.shields.io/badge/Flask--SQLAlchemy-2.4.1-red.svg?longCache=true&style=flat-square&logo=flask&logoColor=white&colorA=4c566a&colorB=5e81ac)
+![Flask](https://img.shields.io/badge/Flask-v2.2.4-blue.svg?longCache=true&logo=flask&style=flat-square&logoColor=white&colorB=5e81ac&color%20%20%20%20A=4c566a)
+![Flask-SQLAlchemy](https://img.shields.io/badge/Flask--SQLAlchemy-3.0.2-red.svg?longCache=true&style=flat-square&logo=flask&logoColor=whit%20%20%20%20e&colorA=4c566a&colorB=5e81ac)
 ![GitHub Last Commit](https://img.shields.io/github/last-commit/google/skia.svg?style=flat-square&colorA=4c566a&colorB=a3be8c)
 
 <p>
