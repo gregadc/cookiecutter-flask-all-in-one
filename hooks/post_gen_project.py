@@ -19,7 +19,7 @@ def install_debug_tools():
                         for line in infile:
                             outfile.write(line)
         except OSError as error:
-            logger.warning("Error: {0}".format(error))
+            logger.warning(f"Error: {error}")
             sys.exit(1)
 
 
