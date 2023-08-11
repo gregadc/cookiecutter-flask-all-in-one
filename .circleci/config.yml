@@ -90,7 +90,7 @@ jobs:
             -   run:
                     command: |
                         . venv/bin/activate
-                        black cookiecutter-flask-all-in-one-test --check
+                        tox -e black
 
 workflows:
     version: 2
